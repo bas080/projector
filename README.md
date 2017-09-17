@@ -11,7 +11,9 @@ you to define a project specific bash file.
 ## Quick Install
 
 ```
-$ curl https://raw.github.com/kalouantonis/projector/install.sh | bash
+$ git clone https://github.com/kalouantonis/projector
+$ cd projector
+$ ./install.sh
 ```
 
 ## Usage
