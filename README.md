@@ -4,7 +4,7 @@ Project specific bash scripts.
 
 ## Reasoning
 
-Usually I find myself needing bash commands for specific projects, 
+Usually I find myself needing bash commands for specific projects,
 usually for compilation, working with git, etc. Projector allows
 you to define a project specific bash file.
 
@@ -24,12 +24,16 @@ Define a file in your project root called `.bash_project`. An example:
 ```bash
 #!/bin/bash
 
-alias clean='rm -rf _build'
+alias clean='cd $PROJECT_HOME && rm -rf _build'
 alias compile='rebar3 compile'
 alias recompile='clean && compile'
 ```
 
-Every time you change directory in to your project root the `.bash_project` 
+The `$PROJECT_HOME` variable contains the path of the last sourced
+`.bash_project` file. This allows one to run commands without being in the home
+directory of the project.
+
+Every time you change directory in to your project root the `.bash_project`
 file will be sourced and your commands will be available.
 
 ```
