@@ -34,4 +34,4 @@ function setup_env() {
     echo "$source_command" >> "$source_file"
 }
 
-install $@ && echo succes || echo failure
+install $@ && echo success || echo failure
