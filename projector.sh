@@ -1,8 +1,10 @@
-if [ -z "$(type -t project-cd)" ]; then
-    project-cd() {
-        cd $@
-        test -f .bash_project && source .bash_project && PROJECT_HOME="$PWD"
-    }
-fi
+PROJECTOR_PATH='.bash_project'
 
-alias cd='project-cd'
+projector_prompt() {
+  test -f "$PROJECTOR_PATH" && source_bash_project
+}
+
+source_bash_project() {
+  source "$PROJECTOR_PATH" && \
+    PROJECT_HOME="$PWD"
+}
