@@ -22,6 +22,7 @@ $ ./install.sh
 
 ## Usage
 
+### ./.bash_project
 
 Define a file in your project root called `.bash_project`. An example:
 
@@ -45,6 +46,15 @@ $ cd my/project/dir
 $ recompile
 # ...
 ```
+
+### ./projector_bin
+
+Another feature is the ability to put executable scripts in the `projector_bin`
+directory.
+
+The `projector_bin` path is added to the `PATH` variable when in the project or
+it's child directories. The `projector_bin` path is removed from `PATH` when
+leaving the project directory.
 
 ## Contributors
 
