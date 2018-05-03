@@ -4,13 +4,13 @@ PROJECTOR_BIN_PATH='projector_bin'
 projector_prompt() {
   local projector_path="$(projector_path_find $PWD)"
 
-  test -z $projector_path && return 1
+  test -z $projector_path && return 0
 
   projector_path_changed "$projector_path" || \
     projector_source_modified "$projector_path" && \
     projector_source_bash_project "$projector_path"
 
-  set_path_with_projector_path "$projector_path"
+  set_path_with_projector_path "$projector_path" || return 0
 }
 
 projector_path_changed() {
