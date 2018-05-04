@@ -1,12 +1,12 @@
 #!/bin/bash
 
-PROJECTOR_URL="https://raw.githubusercontent.com/kalouantonis/projector/master/projector.sh"
+PROJECTOR_URL="https://raw.githubusercontent.com/bas080/projector/master/projector.sh"
 PROJECTOR_PATH="$HOME/.projector"
 
-PROJECTOR_BASH_URL="https://raw.githubusercontent.com/kalouantonis/projector/master/projector_bash.sh"
+PROJECTOR_BASH_URL="https://raw.githubusercontent.com/bas080/projector/master/projector_bash.sh"
 PROJECTOR_BASH_PATH="$HOME/.projector_bash"
 
-PROJECTOR_ZSH_URL="https://raw.githubusercontent.com/kalouantonis/projector/master/projector_zsh.sh"
+PROJECTOR_ZSH_URL="https://raw.githubusercontent.com/bas080/projector/master/projector_zsh.sh"
 PROJECTOR_ZSH_PATH="$HOME/.projector_zsh"
 
 function install() {
