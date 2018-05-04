@@ -10,12 +10,12 @@ you to define a project specific bash file.
 
 ## Quick Install
 
-`curl https://raw.githubusercontent.com/kalouantonis/projector/master/install.sh | bash`
+`curl https://raw.githubusercontent.com/bas080/projector/master/install.sh | bash`
 
 or
 
 ```
-$ git clone https://github.com/kalouantonis/projector
+$ git clone https://github.com/bas080/projector
 $ cd projector
 $ ./install.sh
 ```
