@@ -12,9 +12,10 @@ function path() {
 }
 
 function install() {
-  download "$(url projector_zsh.sh)" "$(path .projector_zsh)" && \
-    download "$(url projector_bash.sh)" "$(path .projector_bash)" && \
-    download "$(url projector.sh)" "$(path .projector)" && \
+  local version="$1"
+  download "$(url projector_zsh.sh $version)" "$(path .projector_zsh)" && \
+    download "$(url projector_bash.sh $version)" "$(path .projector_bash)" && \
+    download "$(url projector.sh $version)" "$(path .projector)" && \
     setup_env "$HOME/.bashrc" "source ~/.projector_bash" && \
     setup_env "$HOME/.zshrc"  "source ~/.projector_zsh"
 }
@@ -23,7 +24,8 @@ function download() {
   local url="$1"
   local filename="$2"
 
-  curl -f "$url" > "$filename"
+  echo "$url > $filename"
+  curl -s -f "$url" > "$filename"
 }
 
 function setup_env() {

@@ -1,0 +1,25 @@
+#!/bin/bash
+
+error() {
+  echo "publish: $@" && exit 1
+}
+
+is_newer() {
+  local last=$({
+    echo $@
+    git tag
+  } | sort | tail -n 1)
+
+  test "$last" == "$1"
+}
+
+is_valid() {
+  echo $1 | grep -P 'v\d.\d.\d'
+}
+
+is_valid $1 || error "please pass a valid version string 'v0.0.0'"
+is_newer $1 || error "$1 is not newer. can only create newer versions"
+./script/tests || error "tests are not passing"
+
+git tag $1 && \
+  git push origin $1
