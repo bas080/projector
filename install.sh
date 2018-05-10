@@ -1,18 +1,20 @@
 #!/bin/bash
 
-PROJECTOR_URL="https://raw.githubusercontent.com/bas080/projector/master/projector.sh"
-PROJECTOR_PATH="$HOME/.projector"
+function url() {
+  local file="$1"
+  local branch="${2:-master}"
 
-PROJECTOR_BASH_URL="https://raw.githubusercontent.com/bas080/projector/master/projector_bash.sh"
-PROJECTOR_BASH_PATH="$HOME/.projector_bash"
+  echo "https://raw.githubusercontent.com/bas080/projector/$branch/$file"
+}
 
-PROJECTOR_ZSH_URL="https://raw.githubusercontent.com/bas080/projector/master/projector_zsh.sh"
-PROJECTOR_ZSH_PATH="$HOME/.projector_zsh"
+function path() {
+  echo "$HOME/$1"
+}
 
 function install() {
-  download "$PROJECTOR_ZSH_URL" "$PROJECTOR_ZSH_PATH" && \
-    download "$PROJECTOR_BASH_URL" "$PROJECTOR_BASH_PATH" && \
-    download "$PROJECTOR_URL" "$PROJECTOR_PATH" && \
+  download "$(url projector_zsh.sh)" "$(path .projector_zsh)" && \
+    download "$(url projector_bash.sh)" "$(path .projector_bash)" && \
+    download "$(url projector.sh)" "$(path .projector)" && \
     setup_env "$HOME/.bashrc" "source ~/.projector_bash" && \
     setup_env "$HOME/.zshrc"  "source ~/.projector_zsh"
 }
@@ -34,4 +36,4 @@ function setup_env() {
     echo "$source_command" >> "$source_file"
 }
 
-install $@ && echo success || echo failure
+install "$@" && echo succes || echo failure
