@@ -74,9 +74,11 @@ sources_the_parent_from_child() {
 does_not_source_when_already_sourced() {
   touch $test_dir/.bash_project
 
-  local output="$(test_cd / && test_cd $test_dir && test_cd $test_dir)"
-
-  equals "$output" "projector: sourced $test_dir/.bash_project"
+  {
+    test_cd /
+    test_cd $test_dir
+    test_cd $test_dir
+  } | equals "projector: sourced $test_dir/.bash_project"
 }
 
 sources_when_file_has_modified() {
@@ -102,7 +104,20 @@ sources_when_moving_back_to_parent() {
     equals "projector: sourced $test_dir/.bash_project"
 }
 
+adds_project_bin_to_path() {
+  mkdir $test_dir/projector_bin
+
+  echo echo hello > $test_dir/projector_bin/test_script
+  chmod +x $test_dir/projector_bin/test_script
+
+  test_cd $test_dir | \
+    equals "projector: added  $test_dir/projector_bin to PATH" && \
+    $test_dir/projector_bin/test_script | \
+    equals 'hello'
+}
+
 echo """sources_when_a_bash_project_is_created
+adds_project_bin_to_path
 does_not_source_when_already_sourced
 sources_the_parent_from_child
 sources_when_child_has_bash_project
