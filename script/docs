@@ -1,0 +1,11 @@
+#!/bin/bash
+
+error() {
+  echo "docs: $@"
+  test -d ./projector/ && rm -rf ./projector/
+  exit 1
+}
+
+bash $(find ./doc/example/ -type f) || error 'some doc examples are exiting with non zero exit code'
+
+mash ./doc/README.md > README.md

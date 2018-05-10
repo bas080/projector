@@ -1,25 +1,3 @@
-# Projector
-
-Project specific bash scripts.
-
-## Reasoning
-
-Usually I find myself needing bash commands for specific projects,
-usually for compilation, working with git, etc. Projector allows
-you to define a project specific bash file.
-
-## Installation
-
-```sh
-curl https://raw.githubusercontent.com/bas080/projector/master/script/install | bash
-```
-
-```sh
-git clone https://github.com/bas080/projector && \
-  cd projector && \
-  ./script/install
-```
-
 ## Instructions
 
 ### ./.bash_project
@@ -55,13 +33,4 @@ directory.
 The `projector_bin` path is added to the `PATH` variable when in the project or
 it's child directories. The `projector_bin` path is removed from `PATH` when
 leaving the project directory.
-
-## Contributors
-
-- [Antonis Kalou](https://github.com/kalouantonis)
-- [Bas Huis](https://github.com/bas080)
-
-## License
-
-MIT, see [LICENSE](LICENSE) file.
 

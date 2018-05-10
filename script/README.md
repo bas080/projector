@@ -16,3 +16,9 @@ to the remote.
 # tests
 
 This file contains the tests. You can run them by typing `./script/tests`.
+
+# docs
+
+Projector's README.md is generated using the files located in the `./doc`
+directory. The `./script/docs` scripts tests if the docs and doc examples are
+working as expected and then generates the `./README.md`
