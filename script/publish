@@ -17,10 +17,15 @@ is_valid() {
   echo $1 | grep -P '\d.\d.\d'
 }
 
+repo_is_clean() {
+  git diff-index --quiet HEAD --
+}
+
 is_valid $1 || error "please pass a valid version string 'v0.0.0'"
 is_newer $1 || error "$1 is not newer. can only create newer versions"
-./script/tests || error "tests are not passing"
 ./script/docs || error "not able to generate docs"
+./script/tests || error "tests are not passing"
+repo_is_clean || error "please commit staged and unstaged changes"
 
 git tag $1 && \
   git push origin $1
