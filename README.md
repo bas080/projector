@@ -1,5 +1,7 @@
 # Projector
 
+[![Build Status](https://travis-ci.org/bas080/projector.svg?branch=master)](https://travis-ci.org/bas080/projector)
+
 Project specific bash scripts.
 
 ## Reasoning
