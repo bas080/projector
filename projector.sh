@@ -4,20 +4,18 @@ PROJECTOR_BIN_PATH='projector_bin'
 projector_prompt() {
   local projector_path="$(projector_path_find $PWD)"
 
-  projector_path_changed "$projector_path" || \
-    projector_source_modified "$projector_path" && \
-    projector_source_bash_project "$projector_path"
-
-  projector_path_changed "$projector_path" && \
-    set_path_with_projector_path "$projector_path"
+  projector_path_changed "$projector_path" \
+    && set_path_with_projector_path "$projector_path" \
+    || {
+      projector_source_modified "$projector_path" && \
+      projector_source_bash_project "$projector_path"
+    }
 
   projector_prompt_post $projector_path
 }
 
 projector_prompt_post() {
   local file="$1/$PROJECTOR_SOURCE_PATH"
-
-  PROJECT_HOME="$1"
 
   test -f "$file" && \
     PROJECTOR_SOURCE_MOD_DATE="$(projector_bash_project_mod_date $1)"
@@ -41,6 +39,8 @@ projector_bash_project_mod_date() {
 
 projector_source_bash_project() {
   local file="$1/$PROJECTOR_SOURCE_PATH"
+
+  PROJECT_HOME="$1"
 
   test -f "$file" && \
     source "$file" && \
