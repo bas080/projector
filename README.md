@@ -66,4 +66,3 @@ leaving the project directory.
 ## License
 
 MIT, see [LICENSE](LICENSE) file.
-
