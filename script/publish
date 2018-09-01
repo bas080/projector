@@ -23,8 +23,6 @@ repo_is_clean() {
 
 is_valid $1 || error "please pass a valid version string '0.0.0'"
 is_newer $1 || error "$1 is not newer. can only create newer versions"
-./script/docs || error "not able to generate docs"
-./script/tests || error "tests are not passing"
 repo_is_clean || error "please commit staged and unstaged changes"
 
 git tag $1 && \
