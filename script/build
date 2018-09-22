@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+
+set -e
+
+shell_source="./src/projector.$1"
+
+error() { echo "$@" && exit 1; }
+
+test -f "$shell_source" || error 'echo "usage: build bash|zsh"'
+
+cat ./src/projector.sh "$shell_source"

@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+set -e
+
+mkdir -p ./dist
+
+./script/build bash > dist/projector.bash
+./script/build zsh > ./dist/projector.zsh

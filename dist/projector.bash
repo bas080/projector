@@ -1,8 +1,3 @@
-#!/usr/bin/env bash
-
-bake-source() { return 0; }
-  
-# bake: projector
 PROJECTOR_EXIT='exit 1'
 
 projector_prompt() {
@@ -61,7 +56,6 @@ projector_init() {
   rm "$PROJECTOR_SOURCE_AFTER"
   projector_prompt
 }
-
 bake-source projector
 
 projector_rc() {

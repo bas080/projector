@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env sh
 
 error() {
   echo "publish: $@" && exit 1
