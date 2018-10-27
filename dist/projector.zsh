@@ -1,74 +1,71 @@
-PROJECTOR_EXIT='exit 1'
+# Common projector utilities that are used between different shell applicatiobs.
+
+projector_log() {
+  echo "projector:" "$@"
+}
 
 projector_prompt() {
-  local current_path="$(projector_path_source $PWD)"
-
-  test "$current_path" != "$PROJECTOR_SOURCED_FILENAME" \
-    && test -n "$PROJECTOR_SOURCED_FILENAME" \
-    && {
-      echo "cd \"$PWD\"" > "$PROJECTOR_SOURCE_AFTER"
-      eval "$PROJECTOR_EXIT"
-    }
-
-  test -z "$PROJECTOR_SOURCED_FILENAME" \
-    && projector_init "$current_path"
-
-  test -n "$PROJECTOR_SOURCED_FILENAME" \
-    && {
-      local mod="$(projector_local_modified_at $PROJECTOR_SOURCED_FILENAME)"
-      test "$mod" != "$PROJECTOR_SOURCED_AT" \
-        && source $PROJECTOR_SOURCED_FILENAME \
-        && PROJECTOR_SOURCED_AT="$mod" \
-        && echo "projector: source $PROJECTOR_SOURCED_FILENAME"
-    }
+  test -n "$PROJECTOR_HOME" \
+    && projector_prompt_in \
+    || projector_prompt_out
 }
 
-projector_path_source() {
-  local path="$1/$PROJECTOR_SOURCE_FILENAME"
+projector_prompt_in() {
+  local dir="$(projector_path "$PWD")"
+  local code="$?"
 
-  test -f "$path" && echo "$path" && return 0
-  test '/' = "$1" && return 1
+  test "$dir" = "$PROJECTOR_HOME" && return 0
 
-  projector_path_source "$(dirname $1)"
+  echo "cd $PWD" >> "$PROJECTOR_ON_EXIT"
+
+  projector_log "exit"
+
+  exit
 }
 
-projector_local_modified_at() {
-  stat -c %y "$1"
+projector_prompt_out() {
+  local dir="$(projector_path "$PWD")"
+  local on_exit="$(mktemp)"
+
+  test -n "$dir" && {
+    projector_log "$dir"
+    projector_shell "$dir" "$on_exit"
+    source "$on_exit"
+    test "$(projector_path "$PWD")" = "$dir" && exit
+    projector_prompt_out
+  }
 }
 
-projector_init() {
-  test -z "$1" && return 1
+projector_path() {
+  local dir="$1"
 
-  local rc="$(projector_rc $1)"
-  local projector_home="$(dirname $1)"
+  test -f "$dir/$PROJECTOR_FILENAME" && echo "$dir" && return 0
+  test '/' = "$dir" && return 1
+
+  projector_path "$(dirname "$1")"
+}
+
+projector_is_modified() {
+  local modified="$(stat -c %y "$1")"
+  test "$modified" = "$PROJECTOR_MODIFIED"
+  local code="$?"
+  PROJECTOR_MODIFIED="$modified"
+  return $code
+}
+export PROJECTOR_FILENAME=".local.zshrc"
+
+projector_shell() {
+  local tmp="$(mktemp)"
+  local source_file="$1/$PROJECTOR_FILENAME"
+
+  cat /etc/zsh/zshenv /etc/zsh/zshrc /home/superman/.zcompdump /home/superman/.zshrc $source_file > "$tmp"
 
   echo """
-  PROJECTOR_SOURCED_AT=\"$(projector_local_modified_at $1)\"
-  PROJECTOR_HOME=\"$projector_home\"
-  PROJECTOR_SOURCED_FILENAME=\"$1\"
-  echo "projector: [$1] $PROJECTOR_INIT $rc"
-  """ >> $rc
+  PROJECTOR_HOME=\"$1\"
+  PROJECTOR_ON_EXIT=\"$2\"
+  """ >> "$tmp"
 
-  export PROJECTOR_SOURCE_AFTER="$(mktemp)"
-  eval "$PROJECTOR_INIT $rc" && exit
-  echo "projector: [$1] $PROJECTOR_EXIT"
-  source "$PROJECTOR_SOURCE_AFTER"
-  rm "$PROJECTOR_SOURCE_AFTER"
-  projector_prompt
+  zsh -c "ARGV0=sh ENV=$tmp exec zsh"
 }
-projector_rc() {
-  local tmp="$(mktemp)"
-
-  cat \
-    /etc/zsh/zshenv \
-    /usr/share/zsh \
-    $HOME/.zshrc \
-    > $tmp
-
-  echo $tmp
-}
-
-PROJECTOR_INIT='zsh --rcfile'
-PROJECTOR_SOURCE_FILENAME=".local.zshrc"
 
 precmd_functions=(projector_prompt)

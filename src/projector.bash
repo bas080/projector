@@ -1,20 +1,18 @@
-projector_rc() {
-  local tmp="$(mktemp)"
-
-  cat \
-    /etc/bash.bashrc \
-    "$HOME/.bashrc" \
-    "$1" \
-    > "$tmp"
-
-  echo "$tmp"
-}
+export PROJECTOR_FILENAME=".local.bashrc"
 
 projector_shell() {
-  bash --rcfile "$1"
-}
+  local tmp="$(mktemp)"
+  local source_file="$1/$PROJECTOR_FILENAME"
 
-export PROJECTOR_SOURCE_FILENAME=".local.bashrc"
+  echo """
+  PROJECTOR_HOME=\"$1\"
+  PROJECTOR_ON_EXIT=\"$2\"
+  """ > "$tmp"
+
+  cat /etc/bash.bashrc "$HOME/.bashrc" "$source_file" >> "$tmp"
+
+  bash --rcfile "$tmp"
+}
 
 echo "$PROMPT_COMMAND" | grep -q 'projector_prompt;' \
   || PROMPT_COMMAND="projector_prompt;$PROMPT_COMMAND"

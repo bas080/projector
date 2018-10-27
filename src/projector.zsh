@@ -1,18 +1,17 @@
-projector_rc() {
-  local tmp="$(mktemp)"
-
-  #cat /etc/zsh/zshenv /etc/zsh/zshrc /home/superman/.zcompdump /home/superman/.zshrc > "$tmp"
-
-  cat "$1" > $tmp
-
-  echo "$tmp"
-}
+export PROJECTOR_FILENAME=".local.zshrc"
 
 projector_shell() {
-  echo _shell
-  zsh --rcs "$1"
-}
+  local tmp="$(mktemp)"
+  local source_file="$1/$PROJECTOR_FILENAME"
 
-export PROJECTOR_SOURCE_FILENAME=".local.zshrc"
+  cat /etc/zsh/zshenv /etc/zsh/zshrc /home/superman/.zcompdump /home/superman/.zshrc $source_file > "$tmp"
+
+  echo """
+  PROJECTOR_HOME=\"$1\"
+  PROJECTOR_ON_EXIT=\"$2\"
+  """ >> "$tmp"
+
+  zsh -c "ARGV0=sh ENV=$tmp exec zsh"
+}
 
 precmd_functions=(projector_prompt)
