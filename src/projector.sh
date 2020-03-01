@@ -1,7 +1,7 @@
-# Common projector utilities that are used between different shell applicatiobs.
+# Common projector utilities that are used between different shell applications.
 
 projector_log() {
-  echo "projector:" "$@"
+  printf "projector: %s\n" "$@" 1>&2
 }
 
 projector_prompt() {

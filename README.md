@@ -12,6 +12,9 @@ you to define a project specific bash file.
 
 ## Installation
 
+> It's also possible to download a specific version by replacing `master` with
+> a valid version.
+
 The intention is to source the shell specific version of projector.
 
 ### Bash
